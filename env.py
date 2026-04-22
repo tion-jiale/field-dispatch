@@ -24,6 +24,11 @@ def haversine(lat1, lon1, lat2, lon2):
 def norm_lat(lat): return (lat + 90.0)  / 180.0
 def norm_lon(lon): return (lon + 180.0) / 360.0
 
+# ── Module-level GNN constants (imported by api.py) ───────────────────────
+NODE_FEAT  = 5
+GNN_HIDDEN = 16
+GNN_OUT    = 8
+
 # ═══════════════════════════════════════════════════════════════════════════
 # GNN — Graph Attention Layer
 # Nodes = technicians + jobs; Edges = distances
@@ -83,10 +88,7 @@ class FieldDispatchEnv(gym.Env):
     LAT_MIN, LAT_MAX = 3.6277,  3.9877   # 3.8077 ± ~0.18°
     LON_MIN, LON_MAX = 103.146, 103.506  # 103.326 ± ~0.18°
 
-    # GNN architecture
-    NODE_FEAT  = 5    # [norm_lat, norm_lon, skill/priority, availability, type]
-    GNN_HIDDEN = 16
-    GNN_OUT    = 8
+    # GNN architecture (uses module-level constants)
 
     def __init__(self, num_techs: int = 5, num_jobs: int = 3,
                  render_mode=None):
