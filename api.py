@@ -207,13 +207,40 @@ async def assign(job: JobRequest):
     return record
 
 
-# ── GET /assignments — Streamlit can also poll this ───────────────────────
+# ── GET /assignments ──────────────────────────────────────────────────────
 @app.get("/assignments")
 def get_assignments():
     if not os.path.exists(ASSIGNMENTS_CSV):
         return []
     df = pd.read_csv(ASSIGNMENTS_CSV)
     return df.to_dict(orient="records")
+
+
+# ── GET /technicians ──────────────────────────────────────────────────────
+@app.get("/technicians")
+def get_technicians():
+    if os.path.exists("technician_dataset.csv"):
+        df = pd.read_csv("technician_dataset.csv")
+        return df.to_dict(orient="records")
+    return []
+
+
+# ── GET /workload ─────────────────────────────────────────────────────────
+@app.get("/workload")
+def get_workload():
+    if os.path.exists("workload_dataset.csv"):
+        df = pd.read_csv("workload_dataset.csv")
+        return df.to_dict(orient="records")
+    return []
+
+
+# ── GET /eval_log ─────────────────────────────────────────────────────────
+@app.get("/eval_log")
+def get_eval_log():
+    if os.path.exists("eval_log.csv"):
+        df = pd.read_csv("eval_log.csv")
+        return df.to_dict(orient="records")
+    return []
 
 
 # ── GET /health ────────────────────────────────────────────────────────────
