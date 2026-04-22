@@ -1,0 +1,8 @@
+# Streamlit Cloud dependencies only
+# Railway uses requirements.txt (full dependencies)
+
+numpy==1.26.4
+pandas==2.2.3
+streamlit==1.39.0
+streamlit-folium==0.23.1
+folium==0.18.0
