@@ -1,51 +1,61 @@
-job_id,priority,problems,timestamp,lat,lon,duration_exp,status
-JOB0001,3,Air compressor breakdown,2025-01-25 12:00:00,3.791869,103.428766,157,Ongoing
-JOB0002,4,CCTV system down,2025-01-28 18:00:00,3.699474,103.33113,97,Submitted
-JOB0003,5,Fire suppression system fault,2025-01-11 20:00:00,3.841003,103.162559,97,Completed
-JOB0004,4,Car wash machine breakdown,2025-01-26 06:00:00,3.846455,103.20727,132,Ongoing
-JOB0005,2,Fire suppression system fault,2025-01-10 16:00:00,3.737291,103.181017,156,Submitted
-JOB0006,1,CCTV system down,2025-01-03 08:00:00,3.87409,103.304433,70,Completed
-JOB0007,5,POS terminal not working,2025-01-19 08:00:00,3.671498,103.324262,128,Ongoing
-JOB0008,4,Fire suppression system fault,2025-01-26 18:00:00,3.720774,103.384567,94,Completed
-JOB0009,1,Fire suppression system fault,2025-01-01 19:00:00,3.739848,103.333232,98,Completed
-JOB0010,1,Generator fault,2025-01-15 20:00:00,3.824533,103.212434,141,Submitted
-JOB0011,1,Generator fault,2025-01-20 16:00:00,3.842979,103.478027,158,Submitted
-JOB0012,1,Generator fault,2025-01-22 23:00:00,3.643818,103.263056,159,Completed
-JOB0013,2,Electrical wiring issue,2025-01-09 19:00:00,3.767584,103.243603,71,Completed
-JOB0014,1,Car wash machine breakdown,2025-01-23 23:00:00,3.926164,103.27438,112,Ongoing
-JOB0015,1,Electrical wiring issue,2025-01-02 03:00:00,3.728757,103.341386,108,Submitted
-JOB0016,2,Car wash machine breakdown,2025-01-03 19:00:00,3.678303,103.4349,50,Submitted
-JOB0017,1,Fire suppression system fault,2025-01-22 01:00:00,3.905806,103.217429,62,Submitted
-JOB0018,4,Fire suppression system fault,2025-01-29 11:00:00,3.882243,103.408525,72,Ongoing
-JOB0019,5,Canopy lighting failure,2025-01-23 20:00:00,3.756697,103.187574,84,Completed
-JOB0020,2,Generator fault,2025-01-30 18:00:00,3.938548,103.370432,132,Completed
-JOB0021,3,Underground tank sensor error,2025-01-29 01:00:00,3.746762,103.168724,162,Ongoing
-JOB0022,2,Air compressor breakdown,2025-01-06 11:00:00,3.739586,103.263003,46,Ongoing
-JOB0023,5,Fire suppression system fault,2025-01-02 05:00:00,3.890441,103.37557,88,Completed
-JOB0024,1,POS terminal not working,2025-01-10 17:00:00,3.947236,103.315987,45,Submitted
-JOB0025,1,Electrical wiring issue,2025-01-04 05:00:00,3.670617,103.402845,48,Completed
-JOB0026,3,Underground tank sensor error,2025-01-11 11:00:00,3.901677,103.348082,84,Completed
-JOB0027,5,Car wash machine breakdown,2025-01-06 23:00:00,3.905346,103.323764,151,Submitted
-JOB0028,4,Air compressor breakdown,2025-01-21 12:00:00,3.815892,103.299889,54,Submitted
-JOB0029,4,Electrical wiring issue,2025-01-29 10:00:00,3.638846,103.375157,138,Ongoing
-JOB0030,1,POS terminal not working,2025-01-21 06:00:00,3.740801,103.329089,45,Ongoing
-JOB0031,1,Air compressor breakdown,2025-01-15 19:00:00,3.954571,103.235655,79,Submitted
-JOB0032,4,CCTV system down,2025-01-24 05:00:00,3.775406,103.418091,138,Submitted
-JOB0033,4,Air compressor breakdown,2025-01-13 05:00:00,3.731935,103.203918,49,Ongoing
-JOB0034,1,Fuel pump failure,2025-01-24 19:00:00,3.855773,103.45986,168,Submitted
-JOB0035,2,CCTV system down,2025-01-05 07:00:00,3.917131,103.213052,134,Ongoing
-JOB0036,2,Canopy lighting failure,2025-01-21 20:00:00,3.949163,103.340177,45,Submitted
-JOB0037,1,Canopy lighting failure,2025-01-17 12:00:00,3.742116,103.185478,97,Ongoing
-JOB0038,4,Fire suppression system fault,2025-01-13 12:00:00,3.709659,103.299733,154,Submitted
-JOB0039,3,Air compressor breakdown,2025-01-09 10:00:00,3.9223,103.455993,44,Completed
-JOB0040,1,Electrical wiring issue,2025-01-24 11:00:00,3.630025,103.329873,44,Submitted
-JOB0041,4,Fire suppression system fault,2025-01-26 06:00:00,3.777938,103.225859,165,Submitted
-JOB0042,5,POS terminal not working,2025-01-03 18:00:00,3.670715,103.267483,77,Submitted
-JOB0043,1,Air compressor breakdown,2025-01-26 17:00:00,3.967307,103.262289,133,Submitted
-JOB0044,2,Car wash machine breakdown,2025-01-25 15:00:00,3.814471,103.39916,40,Completed
-JOB0045,4,Car wash machine breakdown,2025-01-04 19:00:00,3.758558,103.496012,174,Completed
-JOB0046,3,Air compressor breakdown,2025-01-14 19:00:00,3.806708,103.254244,110,Submitted
-JOB0047,4,CCTV system down,2025-01-12 15:00:00,3.847183,103.326965,106,Ongoing
-JOB0048,1,Fuel pump failure,2025-01-14 19:00:00,3.954823,103.232148,147,Completed
-JOB0049,1,POS terminal not working,2025-01-25 08:00:00,3.679734,103.322199,167,Submitted
-JOB0050,3,CCTV system down,2025-01-22 22:00:00,3.869731,103.420277,119,Submitted
+job_id,station_name,priority,problems,required_skill,timestamp,lat,lon,duration_exp,status
+JOB0001,Unnamed Station 2,3,Car wash machine breakdown,Mechanical,2025-01-27 14:00:00,3.90341,103.247007,133,Completed
+JOB0002,Shell Kuantan 1,3,Generator fault,Electrical,2025-01-01 08:00:00,3.815545,103.333072,83,Ongoing
+JOB0003,Smart Kuantan,3,Car wash machine breakdown,Mechanical,2025-01-26 01:00:00,3.797242,103.168469,149,Ongoing
+JOB0004,BHPetrol Kuantan,5,Air compressor breakdown,Mechanical,2025-01-20 04:00:00,3.944034,103.242266,151,Completed
+JOB0005,Shell Kuantan 2,3,POS terminal not working,IT,2025-01-08 13:00:00,3.804817,103.302452,161,Completed
+JOB0006,Petron Kuantan 1,3,Car wash machine breakdown,Mechanical,2025-01-28 08:00:00,3.82934,103.341495,53,Submitted
+JOB0007,Petronas Kuantan 1,2,Generator fault,Electrical,2025-01-30 00:00:00,3.822347,103.3268,80,Submitted
+JOB0008,Petronas Kuantan 2,2,Fuel pump failure,Mechanical,2025-01-02 09:00:00,3.736345,103.307325,151,Completed
+JOB0009,Petronas Jaya Gading,4,Underground tank sensor error,IT,2025-01-04 10:00:00,3.756409,103.203324,177,Submitted
+JOB0010,Petron Batu 3,4,Canopy lighting failure,Electrical,2025-01-31 01:00:00,3.784425,103.288091,132,Submitted
+JOB0011,Petron Kuantan 2,1,Fuel pump failure,Mechanical,2025-01-07 15:00:00,3.923673,103.366986,138,Submitted
+JOB0012,Unnamed Station 1,4,Fire suppression system fault,Civil,2025-01-08 20:00:00,3.843438,103.338643,42,Completed
+JOB0013,Unnamed Station 2,4,POS terminal not working,IT,2025-01-11 23:00:00,3.903587,103.246818,64,Ongoing
+JOB0014,Shell Kuantan 1,5,Fire suppression system fault,Civil,2025-01-29 19:00:00,3.815999,103.333389,111,Ongoing
+JOB0015,Smart Kuantan,4,Fire suppression system fault,Civil,2025-01-27 11:00:00,3.79643,103.168705,170,Ongoing
+JOB0016,BHPetrol Kuantan,4,Underground tank sensor error,IT,2025-01-08 02:00:00,3.94404,103.241785,96,Submitted
+JOB0017,Shell Kuantan 2,5,Generator fault,Electrical,2025-01-28 12:00:00,3.804719,103.302687,154,Completed
+JOB0018,Petron Kuantan 1,4,Generator fault,Electrical,2025-01-11 12:00:00,3.829928,103.341641,49,Completed
+JOB0019,Petronas Kuantan 1,3,Air compressor breakdown,Mechanical,2025-01-13 12:00:00,3.821977,103.326705,115,Ongoing
+JOB0020,Petronas Kuantan 2,2,POS terminal not working,IT,2025-01-24 09:00:00,3.736102,103.307415,68,Submitted
+JOB0021,Petronas Jaya Gading,2,CCTV system down,IT,2025-01-17 16:00:00,3.756552,103.203383,46,Ongoing
+JOB0022,Petron Batu 3,5,Electrical wiring issue,Electrical,2025-01-18 17:00:00,3.784069,103.287876,149,Ongoing
+JOB0023,Petron Kuantan 2,4,Air compressor breakdown,Mechanical,2025-01-03 23:00:00,3.923202,103.366212,129,Completed
+JOB0024,Unnamed Station 1,5,Fuel pump failure,Mechanical,2025-01-31 00:00:00,3.843701,103.338997,127,Ongoing
+JOB0025,Unnamed Station 2,3,Electrical wiring issue,Electrical,2025-01-01 14:00:00,3.903429,103.246684,129,Ongoing
+JOB0026,Shell Kuantan 1,5,Fire suppression system fault,Civil,2025-01-24 07:00:00,3.81608,103.332829,86,Ongoing
+JOB0027,Smart Kuantan,4,Generator fault,Electrical,2025-01-10 16:00:00,3.796554,103.168685,154,Submitted
+JOB0028,BHPetrol Kuantan,4,Electrical wiring issue,Electrical,2025-01-17 22:00:00,3.944552,103.241803,72,Ongoing
+JOB0029,Shell Kuantan 2,5,Car wash machine breakdown,Mechanical,2025-01-06 18:00:00,3.805217,103.303068,36,Ongoing
+JOB0030,Petron Kuantan 1,1,Car wash machine breakdown,Mechanical,2025-01-26 14:00:00,3.829293,103.342006,51,Completed
+JOB0031,Petronas Kuantan 1,4,CCTV system down,IT,2025-01-19 14:00:00,3.821841,103.326642,76,Submitted
+JOB0032,Petronas Kuantan 2,3,Canopy lighting failure,Electrical,2025-01-12 10:00:00,3.736345,103.307023,84,Ongoing
+JOB0033,Petronas Jaya Gading,4,Electrical wiring issue,Electrical,2025-01-15 06:00:00,3.755766,103.203909,101,Ongoing
+JOB0034,Petron Batu 3,4,POS terminal not working,IT,2025-01-12 02:00:00,3.78391,103.287773,34,Completed
+JOB0035,Petron Kuantan 2,3,Fuel pump failure,Mechanical,2025-01-24 08:00:00,3.922983,103.366711,87,Completed
+JOB0036,Unnamed Station 1,1,Fuel pump failure,Mechanical,2025-01-04 06:00:00,3.843762,103.338559,93,Submitted
+JOB0037,Unnamed Station 2,2,Car wash machine breakdown,Mechanical,2025-01-02 04:00:00,3.903843,103.246637,91,Submitted
+JOB0038,Shell Kuantan 1,5,POS terminal not working,IT,2025-01-21 12:00:00,3.815843,103.332771,85,Ongoing
+JOB0039,Smart Kuantan,3,Generator fault,Electrical,2025-01-31 04:00:00,3.797046,103.168593,72,Completed
+JOB0040,BHPetrol Kuantan,2,POS terminal not working,IT,2025-01-27 05:00:00,3.944508,103.241709,109,Submitted
+JOB0041,Shell Kuantan 2,3,Fuel pump failure,Mechanical,2025-01-26 00:00:00,3.804919,103.302485,177,Completed
+JOB0042,Petron Kuantan 1,2,Canopy lighting failure,Electrical,2025-01-17 08:00:00,3.829912,103.34214,49,Completed
+JOB0043,Petronas Kuantan 1,1,Air compressor breakdown,Mechanical,2025-01-30 19:00:00,3.821742,103.326667,107,Completed
+JOB0044,Petronas Kuantan 2,5,POS terminal not working,IT,2025-01-26 22:00:00,3.736511,103.30704,40,Ongoing
+JOB0045,Petronas Jaya Gading,3,Canopy lighting failure,Electrical,2025-01-24 01:00:00,3.756162,103.203374,47,Completed
+JOB0046,Petron Batu 3,1,Electrical wiring issue,Electrical,2025-01-28 23:00:00,3.783705,103.288413,137,Ongoing
+JOB0047,Petron Kuantan 2,3,Canopy lighting failure,Electrical,2025-01-05 20:00:00,3.923757,103.366749,147,Completed
+JOB0048,Unnamed Station 1,2,Canopy lighting failure,Electrical,2025-01-07 20:00:00,3.843457,103.338859,163,Completed
+JOB0049,Unnamed Station 2,5,Car wash machine breakdown,Mechanical,2025-01-12 20:00:00,3.904036,103.247241,153,Ongoing
+JOB0050,Shell Kuantan 1,3,Car wash machine breakdown,Mechanical,2025-01-19 22:00:00,3.816061,103.333316,112,Submitted
+JOB0051,Smart Kuantan,4,Generator fault,Electrical,2025-01-05 00:00:00,3.797002,103.16832,92,Ongoing
+JOB0052,BHPetrol Kuantan,4,Car wash machine breakdown,Mechanical,2025-01-25 15:00:00,3.94381,103.242395,116,Submitted
+JOB0053,Shell Kuantan 2,2,Electrical wiring issue,Electrical,2025-01-22 10:00:00,3.805158,103.302391,154,Submitted
+JOB0054,Petron Kuantan 1,3,Generator fault,Electrical,2025-01-16 11:00:00,3.82917,103.341948,101,Completed
+JOB0055,Petronas Kuantan 1,5,Generator fault,Electrical,2025-01-31 06:00:00,3.821514,103.326217,32,Completed
+JOB0056,Petronas Kuantan 2,2,POS terminal not working,IT,2025-01-09 11:00:00,3.736269,103.307163,134,Ongoing
+JOB0057,Petronas Jaya Gading,4,Air compressor breakdown,Mechanical,2025-01-25 00:00:00,3.756272,103.203358,155,Ongoing
+JOB0058,Petron Batu 3,3,POS terminal not working,IT,2025-01-02 01:00:00,3.784263,103.287818,86,Ongoing
+JOB0059,Petron Kuantan 2,3,Air compressor breakdown,Mechanical,2025-01-30 20:00:00,3.923239,103.366851,178,Ongoing
+JOB0060,Unnamed Station 1,5,Fire suppression system fault,Civil,2025-01-21 12:00:00,3.843737,103.339309,118,Ongoing

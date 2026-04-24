@@ -1,11 +1,51 @@
-technician_id,technician_shift,skill,status,job_type,experience,lat,lon
-TECH001,Morning,1.1,Working,Electrical,8,3.762489,103.48842
-TECH002,Morning,3.9,Off Shift,Mechanical,19,3.891301,103.361553
-TECH003,Evening,1.1,Available,Electrical,8,3.683743,103.202034
-TECH004,Morning,3.2,Off Shift,Civil,8,3.844138,103.400981
-TECH005,Evening,3.4,Available,Electrical,14,3.927499,103.222338
-TECH006,Evening,2.1,Available,IT,4,3.693042,103.211912
-TECH007,Morning,2.5,Working,IT,20,3.737157,103.334921
-TECH008,Evening,4.2,Off Shift,Civil,18,3.783176,103.250767
-TECH009,Morning,4.9,Working,Mechanical,18,3.848007,103.196088
-TECH010,Evening,4.3,Off Shift,IT,19,3.732797,103.277842
+technician_id,technician_shift,skill,status,job_type,experience,nearest_station,lat,lon
+TECH001,Morning,4.0,Working,Electrical,8,Unnamed Station 2,3.903154,103.24932
+TECH002,Morning,3.7,Available,Mechanical,19,Shell Kuantan 1,3.816966,103.333597
+TECH003,Morning,1.4,Available,Electrical,17,Smart Kuantan,3.795015,103.166836
+TECH004,Morning,3.9,Working,Civil,8,BHPetrol Kuantan,3.941726,103.244015
+TECH005,Evening,4.2,Available,Mechanical,6,Shell Kuantan 2,3.805608,103.303958
+TECH006,Evening,2.1,Working,Electrical,11,Petron Kuantan 1,3.826938,103.344341
+TECH007,Evening,1.4,Available,IT,20,Petronas Kuantan 1,3.823757,103.324968
+TECH008,Morning,3.9,Available,Mechanical,13,Petronas Kuantan 2,3.734505,103.305279
+TECH009,Evening,4.3,Available,IT,19,Petronas Jaya Gading,3.755077,103.203741
+TECH010,Morning,1.2,Available,Electrical,10,Petron Batu 3,3.783704,103.286927
+TECH011,Morning,4.5,Off Shift,Civil,9,Petron Kuantan 2,3.924001,103.36468
+TECH012,Evening,1.7,Available,IT,7,Unnamed Station 1,3.842478,103.338272
+TECH013,Morning,3.4,Working,Electrical,18,Unnamed Station 2,3.903595,103.248425
+TECH014,Morning,2.8,Working,IT,18,Shell Kuantan 1,3.814089,103.333141
+TECH015,Evening,4.4,Available,Mechanical,8,Smart Kuantan,3.797374,103.166243
+TECH016,Evening,2.6,Working,Mechanical,7,BHPetrol Kuantan,3.944696,103.240255
+TECH017,Evening,1.9,Off Shift,Civil,13,Shell Kuantan 2,3.802711,103.305259
+TECH018,Evening,1.6,Off Shift,Electrical,8,Petron Kuantan 1,3.832046,103.343468
+TECH019,Evening,4.0,Working,Civil,19,Petronas Kuantan 1,3.820904,103.324348
+TECH020,Morning,5.0,Available,Electrical,17,Petronas Kuantan 2,3.737221,103.306667
+TECH021,Morning,4.4,Available,Electrical,6,Petronas Jaya Gading,3.754092,103.203581
+TECH022,Evening,3.4,Working,Civil,13,Petron Batu 3,3.781555,103.290268
+TECH023,Evening,3.1,Available,Mechanical,4,Petron Kuantan 2,3.922092,103.367507
+TECH024,Evening,4.1,Working,IT,4,Unnamed Station 1,3.842584,103.339103
+TECH025,Morning,2.8,Available,IT,17,Unnamed Station 2,3.904085,103.24518
+TECH026,Morning,4.5,Working,IT,17,Shell Kuantan 1,3.818251,103.334551
+TECH027,Morning,2.5,Working,Electrical,18,Smart Kuantan,3.79925,103.170829
+TECH028,Morning,3.4,Off Shift,Civil,1,BHPetrol Kuantan,3.944644,103.244316
+TECH029,Evening,4.5,Available,IT,8,Shell Kuantan 2,3.802837,103.301189
+TECH030,Morning,1.3,Available,Civil,3,Petron Kuantan 1,3.827071,103.340856
+TECH031,Morning,1.5,Off Shift,Civil,18,Petronas Kuantan 1,3.821358,103.325287
+TECH032,Evening,4.9,Available,Electrical,10,Petronas Kuantan 2,3.738002,103.306216
+TECH033,Evening,2.8,Available,Civil,4,Petronas Jaya Gading,3.754951,103.203838
+TECH034,Morning,2.4,Available,Electrical,19,Petron Batu 3,3.782131,103.289689
+TECH035,Morning,3.8,Available,Mechanical,8,Petron Kuantan 2,3.921097,103.369261
+TECH036,Morning,4.4,Available,Mechanical,17,Unnamed Station 1,3.845074,103.337366
+TECH037,Evening,1.9,Available,Electrical,19,Unnamed Station 2,3.90116,103.248589
+TECH038,Morning,4.1,Available,Civil,7,Shell Kuantan 1,3.81683,103.334302
+TECH039,Evening,2.4,Available,Civil,15,Smart Kuantan,3.798341,103.166393
+TECH040,Morning,3.7,Off Shift,Mechanical,2,BHPetrol Kuantan,3.94335,103.239959
+TECH041,Evening,4.2,Available,Mechanical,8,Shell Kuantan 2,3.807024,103.303499
+TECH042,Evening,1.6,Available,Electrical,9,Petron Kuantan 1,3.828615,103.339441
+TECH043,Morning,2.8,Available,Mechanical,2,Petronas Kuantan 1,3.820938,103.325578
+TECH044,Morning,4.9,Working,Electrical,6,Petronas Kuantan 2,3.737466,103.307734
+TECH045,Evening,1.9,Available,Civil,2,Petronas Jaya Gading,3.758228,103.203457
+TECH046,Morning,4.9,Available,IT,15,Petron Batu 3,3.782015,103.289208
+TECH047,Evening,1.6,Available,IT,7,Petron Kuantan 2,3.924806,103.36696
+TECH048,Morning,4.0,Off Shift,Mechanical,2,Unnamed Station 1,3.845067,103.338961
+TECH049,Morning,1.2,Available,Mechanical,6,Unnamed Station 2,3.903955,103.246492
+TECH050,Morning,3.7,Available,Electrical,13,Shell Kuantan 1,3.813147,103.330945
