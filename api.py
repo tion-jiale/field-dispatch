@@ -1,7 +1,11 @@
 """
 api.py
 FastAPI server — wraps DRL+GNN model, geocodes address via Nominatim,
-assigns technician, and appends result to assignments.csv for Streamlit.
+assigns technician, saves result to assignments.csv.
+
+Status lifecycle:
+  Available → Working (on assignment) → Available (on completion/auto-reset)
+Auto-reset: technicians marked Working for > MAX_JOB_HOURS are auto-reset to Available.
 """
 
 import os
@@ -11,11 +15,10 @@ import torch
 import torch.nn as nn
 import numpy as np
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-# ── Import GNN from env ────────────────────────────────────────────────────
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from env import GNNEncoder, haversine, NODE_FEAT, GNN_HIDDEN, GNN_OUT  # type: ignore
@@ -23,11 +26,13 @@ from env import GNNEncoder, haversine, NODE_FEAT, GNN_HIDDEN, GNN_OUT  # type: i
 app = FastAPI(title="Field Dispatch API — Kuantan")
 
 # ── Constants ──────────────────────────────────────────────────────────────
-CENTER_LAT   = 3.8077
-CENTER_LON   = 103.3260
-RADIUS_KM    = 20
-JOB_TYPES    = ["Mechanical", "Electrical", "IT", "Civil"]
+CENTER_LAT      = 3.8077
+CENTER_LON      = 103.3260
+RADIUS_KM       = 20
+JOB_TYPES       = ["Mechanical", "Electrical", "IT", "Civil"]
 ASSIGNMENTS_CSV = "assignments.csv"
+TECH_CSV        = "technician_dataset.csv"
+MAX_JOB_HOURS   = 8   # auto-reset technician to Available after 8 hours
 
 LAT_MIN, LAT_MAX = 3.6277,  3.9877
 LON_MIN, LON_MAX = 103.146, 103.506
@@ -36,7 +41,7 @@ def norm_lat(lat): return (lat - LAT_MIN) / (LAT_MAX - LAT_MIN)
 def norm_lon(lon): return (lon - LON_MIN) / (LON_MAX - LON_MIN)
 
 
-# ── Actor network (must match train.py) ───────────────────────────────────
+# ── Actor ──────────────────────────────────────────────────────────────────
 class Actor(nn.Module):
     def __init__(self, input_size, output_size):
         super().__init__()
@@ -49,19 +54,93 @@ class Actor(nn.Module):
         return torch.softmax(self.net(x), dim=-1)
 
 
-# ── Load GNN encoder ──────────────────────────────────────────────────────
+# ── GNN ────────────────────────────────────────────────────────────────────
 gnn = GNNEncoder(NODE_FEAT, GNN_HIDDEN, GNN_OUT)
 gnn.eval()
 
 
-# ── Load technician data ──────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════
+# Technician status helpers
+# ══════════════════════════════════════════════════════════════════════════
 def load_technicians() -> pd.DataFrame:
-    if os.path.exists("technician_dataset.csv"):
-        return pd.read_csv("technician_dataset.csv")
-    raise RuntimeError("technician_dataset.csv not found. Run generate_data.py first.")
+    if os.path.exists(TECH_CSV):
+        return pd.read_csv(TECH_CSV)
+    raise RuntimeError(f"{TECH_CSV} not found. Run generate_data.py first.")
 
 
-# ── Geocode via Nominatim ──────────────────────────────────────────────────
+def save_technicians(df: pd.DataFrame):
+    """Overwrite the technician CSV with updated statuses."""
+    df.to_csv(TECH_CSV, index=False)
+
+
+def set_technician_status(tech_id: str, status: str,
+                          job_lat: float = None, job_lon: float = None):
+    """
+    Update a single technician's status in the CSV.
+    If status='Working' and job coords provided, move tech to job location.
+    If status='Available', keep current location (they stay at last job site).
+    """
+    df = load_technicians()
+    mask = df["technician_id"] == tech_id
+    if not mask.any():
+        return
+    df.loc[mask, "status"] = status
+    if status == "Working" and job_lat is not None and job_lon is not None:
+        df.loc[mask, "lat"] = round(job_lat, 6)
+        df.loc[mask, "lon"] = round(job_lon, 6)
+    save_technicians(df)
+
+
+def auto_reset_stale_technicians():
+    """
+    Reset any technician marked 'Working' whose assignment is older than
+    MAX_JOB_HOURS back to 'Available'. Called on startup and via /reset-stale.
+    """
+    if not os.path.exists(ASSIGNMENTS_CSV):
+        return 0
+
+    df_assign = pd.read_csv(ASSIGNMENTS_CSV)
+    df_tech   = load_technicians()
+
+    cutoff = datetime.now() - timedelta(hours=MAX_JOB_HOURS)
+    reset_count = 0
+
+    # Find dispatched assignments older than cutoff that are not completed
+    df_assign["timestamp"] = pd.to_datetime(df_assign["timestamp"])
+    stale = df_assign[
+        (df_assign["timestamp"] < cutoff) &
+        (df_assign["status"] == "Dispatched")
+    ]
+
+    for _, row in stale.iterrows():
+        tech_id = row["assigned_to"]
+        mask = df_tech["technician_id"] == tech_id
+        if mask.any() and df_tech.loc[mask, "status"].values[0] == "Working":
+            df_tech.loc[mask, "status"] = "Available"
+            reset_count += 1
+        # Mark assignment as auto-completed
+        df_assign.loc[
+            (df_assign["assigned_to"] == tech_id) &
+            (df_assign["timestamp"] == row["timestamp"]),
+            "status"
+        ] = "Auto-Completed"
+
+    if reset_count > 0:
+        save_technicians(df_tech)
+        df_assign.to_csv(ASSIGNMENTS_CSV, index=False)
+
+    return reset_count
+
+
+# ── Run auto-reset on startup ──────────────────────────────────────────────
+@app.on_event("startup")
+async def startup_event():
+    n = auto_reset_stale_technicians()
+    if n > 0:
+        print(f"✅ Auto-reset {n} stale technician(s) to Available on startup")
+
+
+# ── Geocode ────────────────────────────────────────────────────────────────
 async def geocode(address: str) -> tuple[float, float]:
     async with httpx.AsyncClient() as client:
         resp = await client.get(
@@ -72,18 +151,16 @@ async def geocode(address: str) -> tuple[float, float]:
         )
         resp.raise_for_status()
         results = resp.json()
-
     if not results:
         raise HTTPException(422, f"Cannot geocode: '{address}'")
     return float(results[0]["lat"]), float(results[0]["lon"])
 
 
-# ── Build GNN state vector ─────────────────────────────────────────────────
+# ── GNN state vector ───────────────────────────────────────────────────────
 def build_state(pool: pd.DataFrame, job_lat: float, job_lon: float,
                 job_priority: int, job_type_req: int) -> np.ndarray:
     num_nodes = len(pool) + 1
     feats = []
-
     for _, t in pool.iterrows():
         feats.append([
             norm_lat(t["lat"]), norm_lon(t["lon"]),
@@ -91,13 +168,10 @@ def build_state(pool: pd.DataFrame, job_lat: float, job_lon: float,
             1.0 if t["status"] == "Available" else 0.0,
             0.0,
         ])
-    feats.append([
-        norm_lat(job_lat), norm_lon(job_lon),
-        job_priority / 5.0, 0.0, 1.0,
-    ])
+    feats.append([norm_lat(job_lat), norm_lon(job_lon),
+                  job_priority / 5.0, 0.0, 1.0])
 
     x = torch.tensor(feats, dtype=torch.float32)
-
     all_lats = list(pool["lat"]) + [job_lat]
     all_lons = list(pool["lon"]) + [job_lon]
     adj = np.zeros((num_nodes, num_nodes), dtype=np.float32)
@@ -106,16 +180,14 @@ def build_state(pool: pd.DataFrame, job_lat: float, job_lon: float,
             if i != j:
                 d = haversine(all_lats[i], all_lons[i], all_lats[j], all_lons[j])
                 adj[i, j] = 1.0 / (d + 1e-6)
-
     adj_t = torch.tensor(adj, dtype=torch.float32)
     with torch.no_grad():
         embedding = gnn(x, adj_t).numpy()
-
     extra = np.array([0.0, job_priority / 5.0], dtype=np.float32)
     return np.concatenate([embedding, extra])
 
 
-# ── Append result to CSV (Streamlit reads this) ───────────────────────────
+# ── Save assignment ────────────────────────────────────────────────────────
 def save_assignment(record: dict):
     file_exists = os.path.exists(ASSIGNMENTS_CSV)
     with open(ASSIGNMENTS_CSV, "a", newline="") as f:
@@ -131,17 +203,22 @@ class JobRequest(BaseModel):
     address:        str
     job_priority:   int   # 1–5
     required_skill: int   # 0–3
-    problem:        str   = "Not specified"
-    duration_exp:   int   = 60
+    problem:        str = "Not specified"
+    duration_exp:   int = 60
 
 
-# ── POST /assign ──────────────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════
+# POST /assign
+# ══════════════════════════════════════════════════════════════════════════
 @app.post("/assign")
 async def assign(job: JobRequest):
-    # 1. Geocode
+    # 1. Auto-reset any stale technicians before each assignment
+    auto_reset_stale_technicians()
+
+    # 2. Geocode
     job_lat, job_lon = await geocode(job.address)
 
-    # 2. Radius check
+    # 3. Radius check
     dist_center = haversine(CENTER_LAT, CENTER_LON, job_lat, job_lon)
     if dist_center > RADIUS_KM:
         raise HTTPException(
@@ -150,7 +227,7 @@ async def assign(job: JobRequest):
             f"outside the {RADIUS_KM} km service radius."
         )
 
-    # 3. Load technicians & filter
+    # 4. Load & filter technicians (only Available)
     df_tech   = load_technicians()
     available = df_tech[df_tech["status"] == "Available"].copy()
     skilled   = available[
@@ -160,33 +237,40 @@ async def assign(job: JobRequest):
     pool = skilled if not skilled.empty else available
 
     if pool.empty:
-        raise HTTPException(422, "No available technician found.")
+        raise HTTPException(422, "No available technician found. All technicians are currently Working or Off Shift.")
 
     pool = pool.reset_index(drop=True)
 
-    # 4. Build state & run actor
-    state    = build_state(pool, job_lat, job_lon, job.job_priority, job.required_skill)
-    actor    = Actor(len(state), len(pool))
+    # 5. Build state & run actor
+    state = build_state(pool, job_lat, job_lon, job.job_priority, job.required_skill)
+    actor = Actor(len(state), len(pool))
     if os.path.exists("actor.pth"):
-        # Actor was trained with fixed output — use nearest-tech fallback if sizes differ
         try:
-            actor.load_state_dict(torch.load("actor.pth", map_location="cpu"),
-                                  strict=False)
+            actor.load_state_dict(torch.load("actor.pth", map_location="cpu"), strict=False)
         except Exception:
             pass
     actor.eval()
 
     with torch.no_grad():
         probs = actor(torch.tensor(state, dtype=torch.float32))
-        idx   = torch.argmax(probs).item()
-        idx   = min(int(idx), len(pool) - 1)
+        idx   = min(int(torch.argmax(probs).item()), len(pool) - 1)
 
-    assigned  = pool.iloc[idx]
-    dist_km   = haversine(assigned["lat"], assigned["lon"], job_lat, job_lon)
-    eta_min   = round(dist_km / 40 * 60, 1)
+    assigned = pool.iloc[idx]
+    dist_km  = haversine(assigned["lat"], assigned["lon"], job_lat, job_lon)
+    eta_min  = round(dist_km / 40 * 60, 1)
 
-    # 5. Save to CSV for Streamlit
+    # 6. Update technician status → Working and move to job location
+    set_technician_status(
+        assigned["technician_id"],
+        status="Working",
+        job_lat=job_lat,
+        job_lon=job_lon
+    )
+
+    # 7. Save assignment record
+    job_id = f"JOB-{datetime.now().strftime('%Y%m%d%H%M%S')}"
     record = {
+        "job_id":         job_id,
         "timestamp":      datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "customer_name":  job.customer_name,
         "address":        job.address,
@@ -207,7 +291,49 @@ async def assign(job: JobRequest):
     return record
 
 
-# ── GET /assignments ──────────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════
+# POST /complete/{job_id}  — manager/technician marks job as done
+# ══════════════════════════════════════════════════════════════════════════
+@app.post("/complete/{job_id}")
+def complete_job(job_id: str):
+    if not os.path.exists(ASSIGNMENTS_CSV):
+        raise HTTPException(404, "No assignments found.")
+
+    df = pd.read_csv(ASSIGNMENTS_CSV)
+    mask = df["job_id"] == job_id
+
+    if not mask.any():
+        raise HTTPException(404, f"Job {job_id} not found.")
+
+    job_row = df[mask].iloc[0]
+
+    if job_row["status"] == "Completed":
+        raise HTTPException(400, f"Job {job_id} is already completed.")
+
+    # Update assignment status
+    df.loc[mask, "status"] = "Completed"
+    df.to_csv(ASSIGNMENTS_CSV, index=False)
+
+    # Reset technician back to Available
+    set_technician_status(job_row["assigned_to"], status="Available")
+
+    return {
+        "message":      f"Job {job_id} marked as completed.",
+        "technician":   job_row["assigned_to"],
+        "new_status":   "Available",
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# POST /reset-stale  — manually trigger auto-reset
+# ══════════════════════════════════════════════════════════════════════════
+@app.post("/reset-stale")
+def reset_stale():
+    n = auto_reset_stale_technicians()
+    return {"message": f"Reset {n} stale technician(s) to Available."}
+
+
+# ── GET endpoints ──────────────────────────────────────────────────────────
 @app.get("/assignments")
 def get_assignments():
     if not os.path.exists(ASSIGNMENTS_CSV):
@@ -215,35 +341,24 @@ def get_assignments():
     df = pd.read_csv(ASSIGNMENTS_CSV)
     return df.to_dict(orient="records")
 
-
-# ── GET /technicians ──────────────────────────────────────────────────────
 @app.get("/technicians")
 def get_technicians():
-    if os.path.exists("technician_dataset.csv"):
-        df = pd.read_csv("technician_dataset.csv")
-        return df.to_dict(orient="records")
+    if os.path.exists(TECH_CSV):
+        return pd.read_csv(TECH_CSV).to_dict(orient="records")
     return []
 
-
-# ── GET /workload ─────────────────────────────────────────────────────────
 @app.get("/workload")
 def get_workload():
     if os.path.exists("workload_dataset.csv"):
-        df = pd.read_csv("workload_dataset.csv")
-        return df.to_dict(orient="records")
+        return pd.read_csv("workload_dataset.csv").to_dict(orient="records")
     return []
 
-
-# ── GET /eval_log ─────────────────────────────────────────────────────────
 @app.get("/eval_log")
 def get_eval_log():
     if os.path.exists("eval_log.csv"):
-        df = pd.read_csv("eval_log.csv")
-        return df.to_dict(orient="records")
+        return pd.read_csv("eval_log.csv").to_dict(orient="records")
     return []
 
-
-# ── GET /health ────────────────────────────────────────────────────────────
 @app.get("/health")
 def health():
     return {"status": "ok", "model": os.path.exists("actor.pth")}
